@@ -1,0 +1,57 @@
+services:
+
+# Extremadura API
+  extremadura-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: extremadura-api
+    ports:
+      - "8000:8000"
+    container_name: extremadura-api
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./app:/app
+      - ~/.ssh:/root/.ssh
+    networks:
+      - extremadura-api
+    extra_hosts: # Enable access to host machine, comfyui is running on host machine
+      - "host.docker.internal:host-gateway"
+
+# Ollama
+  ollama:
+    build: 
+      context: ./
+      dockerfile: Dockerfile.ollama
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - extremadura-api
+    deploy:
+      resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: all
+                capabilities: [gpu]
+
+# Cloudflare Tunnel
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
+    restart: unless-stopped
+    networks:
+      - extremadura-api
+
+networks:
+  extremadura-api:
+    driver: bridge
+
+volumes:
+  ollama:

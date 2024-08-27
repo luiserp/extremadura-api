@@ -1,0 +1,20 @@
+# Usa la imagen base de ollama/ollama
+FROM ollama/ollama
+
+# Copia los archivos de tu directorio local ./ollama al directorio /ollama en el contenedor
+COPY ./ollama /ollama
+
+# Copia un script de inicio en el contenedor
+COPY ./ollama/start.sh /ollama/start.sh
+
+# Establece el directorio de trabajo en /ollama
+WORKDIR /ollama
+
+# Asegúrate de que el script de inicio tenga permisos de ejecución
+RUN chmod +x /ollama/start.sh
+
+# Expone el puerto 11434 para que sea accesible desde fuera del contenedor
+EXPOSE 11434
+
+# Usa el script de inicio como el comando de entrada
+ENTRYPOINT ["/ollama/start.sh"]
