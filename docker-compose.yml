@@ -20,26 +20,26 @@ services:
       - "host.docker.internal:host-gateway"
 
 # Ollama
-  ollama:
-    build: 
-      context: ./
-      dockerfile: Dockerfile.ollama
-    image: ollama/ollama
-    container_name: ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama:/root/.ollama
-    restart: unless-stopped
-    networks:
-      - extremadura-api
-    deploy:
-      resources:
-          reservations:
-            devices:
-              - driver: nvidia
-                count: all
-                capabilities: [gpu]
+  # ollama:
+  #   build: 
+  #     context: ./
+  #     dockerfile: Dockerfile.ollama
+  #   image: ollama/ollama
+  #   container_name: ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #   restart: unless-stopped
+  #   networks:
+  #     - extremadura-api
+  #   deploy:
+  #     resources:
+  #         reservations:
+  #           devices:
+  #             - driver: nvidia
+  #               count: all
+  #               capabilities: [gpu]
 
 # Cloudflare Tunnel
   cloudflared:

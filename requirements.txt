@@ -4,3 +4,5 @@ ollama
 python-dotenv
 websocket-client
 pillow
+sqlalchemy
+scikit-learn
